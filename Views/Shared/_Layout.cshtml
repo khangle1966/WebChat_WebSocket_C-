@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"] - WebChatServer</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/Home/Register">Register</a></li>
+                <li><a href="/Home/Login">Login</a></li>
+                <li><a href="/Home/Chat">Chat</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+    <footer>
+        <hr />
+        <p>&copy; 2024 - WebChatServer</p>
+    </footer>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

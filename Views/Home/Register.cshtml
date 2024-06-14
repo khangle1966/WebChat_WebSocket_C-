@@ -1,0 +1,27 @@
+﻿@model WebChatServer.Models.RegisterModel
+
+<div class="container">
+    <h2>Register</h2>
+
+    <form method="post" action="/Auth/Register">
+        <div>
+            <label asp-for="Username">Username:</label>
+            <input asp-for="Username" />
+        </div>
+        <div>
+            <label asp-for="Password">Password:</label>
+            <input asp-for="Password" type="password" />
+        </div>
+        <div>
+            <label asp-for="Email">Email:</label>
+            <input asp-for="Email" type="email" />
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div>
+            <p style="color:red">@TempData["ErrorMessage"]</p>
+        </div>
+    }
+</div>

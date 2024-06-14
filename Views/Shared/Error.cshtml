@@ -1,0 +1,17 @@
+﻿@model WebChatServer.Models.ErrorViewModel
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">@Model.RequestId</h2>
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> @Model.RequestId
+    </p>
+    <p>
+        <strong>ShowRequestId:</strong> @Model.ShowRequestId
+    </p>
+}

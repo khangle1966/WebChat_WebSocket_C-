@@ -1,0 +1,23 @@
+﻿@model WebChatServer.Models.LoginModel
+
+<div class="container">
+    <h2>Login</h2>
+
+    <form method="post" action="/Auth/Login">
+        <div>
+            <label asp-for="Username">Username:</label>
+            <input asp-for="Username" />
+        </div>
+        <div>
+            <label asp-for="Password">Password:</label>
+            <input asp-for="Password" type="password" />
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div>
+            <p style="color:red">@TempData["ErrorMessage"]</p>
+        </div>
+    }
+</div>
