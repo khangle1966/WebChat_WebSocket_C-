@@ -1,19 +1,25 @@
 ﻿@model List<WebChatServer.Models.ChatRoomModel>
 
-<h2>Phòng chat</h2>
-<ul>
-    @foreach (var room in Model)
-    {
-        <li>
-            @room.Name - @if (room.IsOnline)
-            {
-                <span>Trực tuyến</span>
-            }
-            else
-            {
-                <span>Ngoại tuyến</span>
-            }
-            <a href="/Home/ChatRoom/@room.Id">Vào phòng</a>
-        </li>
-    }
-</ul>
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" />
+}
+
+<div class="chat-page">
+    <h2>Phòng chat</h2>
+    <ul>
+        @foreach (var room in Model)
+        {
+            <li>
+                @room.Name - @if (room.IsOnline)
+                {
+                    <span>Trực tuyến</span>
+                }
+                else
+                {
+                    <span>Ngoại tuyến</span>
+                }
+                <a href="/Home/ChatRoom/@room.Id">Vào phòng</a>
+            </li>
+        }
+    </ul>
+</div>

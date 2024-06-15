@@ -1,19 +1,25 @@
 ﻿@model List<WebChatServer.Models.Message>
 
-<h2>Tin nhắn trong phòng</h2>
-<div id="messages">
-    <ul>
-        @foreach (var message in Model)
-        {
-            <li class="message" data-timestamp="@message.CreatedAt.Ticks">@message.CreatedAt.ToString("MM/dd/yyyy HH:mm:ss tt") - @message.UserName: @message.Text</li>
-        }
-    </ul>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/chatroom.css" />
+}
 
-<form id="sendForm" method="post">
-    <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." />
-    <button type="submit">Gửi</button>
-</form>
+<div class="chatroom-page">
+    <h2>Tin nhắn trong phòng</h2>
+    <div id="messages">
+        <ul>
+            @foreach (var message in Model)
+            {
+                <li class="message" data-timestamp="@message.CreatedAt.Ticks">@message.CreatedAt.ToString("MM/dd/yyyy HH:mm:ss tt") - @message.UserName: @message.Text</li>
+            }
+        </ul>
+    </div>
+
+    <form id="sendForm" method="post">
+        <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." />
+        <button type="submit">Gửi</button>
+    </form>
+</div>
 
 <script>
     const username = '@Context.Session.GetString("Username")';

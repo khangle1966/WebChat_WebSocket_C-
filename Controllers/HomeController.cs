@@ -58,27 +58,9 @@ namespace WebChatServer.Controllers
                 return RedirectToAction("Login");
             }
 
-            var chatRooms = GetChatRooms();
+            WebSocketHandler.UpdateChatRoomStatus();
+            var chatRooms = WebSocketHandler._chatRooms;
             return View(chatRooms);
-        }
-
-        private List<ChatRoomModel> GetChatRooms()
-        {
-            var chatRooms = new List<ChatRoomModel>
-            {
-                new ChatRoomModel { Id = 1, Name = "Room 1", LastActive = DateTime.Now.AddMinutes(-1) },
-                new ChatRoomModel { Id = 2, Name = "Room 2", LastActive = DateTime.Now.AddMinutes(-5) },
-                new ChatRoomModel { Id = 3, Name = "Room 3", LastActive = DateTime.Now.AddMinutes(-2) },
-                new ChatRoomModel { Id = 4, Name = "Room 4", LastActive = DateTime.Now.AddMinutes(-10) },
-                new ChatRoomModel { Id = 5, Name = "Room 5", LastActive = DateTime.Now.AddMinutes(-3) },
-            };
-
-            foreach (var room in chatRooms)
-            {
-                room.IsOnline = (DateTime.Now - room.LastActive).TotalMinutes <= 3;
-            }
-
-            return chatRooms;
         }
 
         [HttpPost]
@@ -91,6 +73,11 @@ namespace WebChatServer.Controllers
             }
 
             var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                return RedirectToAction("Login");
+            }
+
             await _chatFacade.SaveMessageAsync(id, username, message);
             _chatFacade.UpdateChatRoomStatus(id, true);
 

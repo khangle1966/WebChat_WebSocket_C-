@@ -3,6 +3,10 @@
 <head>
     <title>@ViewData["Title"] - WebChatServer</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    @if (IsSectionDefined("Styles"))
+    {
+        @RenderSection("Styles", required: false)
+    }
 </head>
 <body>
     <header>
@@ -27,7 +31,7 @@
     </main>
     <footer>
         <hr />
-        <p>&copy; 2024 - WebChatServer</p>
+        <p>&copy; 2024 - WebChatServer - Le Trung Khang - 22123039</p>
     </footer>
     @RenderSection("Scripts", required: false)
 </body>

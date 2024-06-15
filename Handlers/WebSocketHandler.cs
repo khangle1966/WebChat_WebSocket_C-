@@ -16,6 +16,7 @@ namespace WebChatServer.Handlers
         private static ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
         private static ConcurrentDictionary<string, (string Username, int ChatRoomId)> _userSessions = new ConcurrentDictionary<string, (string Username, int ChatRoomId)>();
         private readonly MessageRepository _messageRepository;
+        private static Timer _timer;
         public static List<ChatRoomModel>? _chatRooms { get; set; }
 
         public WebSocketHandler(MessageRepository messageRepository)
@@ -25,7 +26,28 @@ namespace WebChatServer.Handlers
             {
                 new ChatRoomModel { Id = 1, Name = "Room 1", LastActive = DateTime.Now.AddMinutes(-1), LastMessageTimestamp = DateTime.Now.AddMinutes(-1) },
                 new ChatRoomModel { Id = 2, Name = "Room 2", LastActive = DateTime.Now.AddMinutes(-5), LastMessageTimestamp = DateTime.Now.AddMinutes(-5) },
+                new ChatRoomModel { Id = 3, Name = "Room 3", LastActive = DateTime.Now.AddMinutes(-2), LastMessageTimestamp = DateTime.Now.AddMinutes(-2) },
+                new ChatRoomModel { Id = 4, Name = "Room 4", LastActive = DateTime.Now.AddMinutes(-10), LastMessageTimestamp = DateTime.Now.AddMinutes(-10) },
+                new ChatRoomModel { Id = 5, Name = "Room 5", LastActive = DateTime.Now.AddMinutes(-3), LastMessageTimestamp = DateTime.Now.AddMinutes(-3) },
             };
+
+            // Bắt đầu kiểm tra định kỳ
+            _timer = new Timer(CheckInactiveRooms, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+        }
+
+        private async void CheckInactiveRooms(object? state)
+        {
+            if (_chatRooms != null)
+            {
+                foreach (var room in _chatRooms)
+                {
+                    if ((DateTime.Now - room.LastMessageTimestamp).TotalMinutes > 3)
+                    {
+                        room.IsOnline = false;
+                        await _messageRepository.ClearMessagesForRoom(room.Id);
+                    }
+                }
+            }
         }
 
         public async Task Handle(HttpContext context)
@@ -111,6 +133,20 @@ namespace WebChatServer.Handlers
                 if (roomId == chatRoomId && _sockets.TryGetValue(connectionId, out WebSocket? socket) && socket.State == WebSocketState.Open)
                 {
                     await socket.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+            }
+        }
+
+        public static void UpdateChatRoomStatus()
+        {
+            if (_chatRooms != null)
+            {
+                foreach (var room in _chatRooms)
+                {
+                    if ((DateTime.Now - room.LastMessageTimestamp).TotalMinutes > 3)
+                    {
+                        room.IsOnline = false;
+                    }
                 }
             }
         }

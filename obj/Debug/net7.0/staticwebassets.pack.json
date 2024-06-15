@@ -5,6 +5,22 @@
       "PackagePath": "staticwebassets\\WebChatServer.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Admin\\source\\repos\\WebChatServer\\WebChatServer\\wwwroot\\css\\auth.css",
+      "PackagePath": "staticwebassets\\css\\auth.css"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\source\\repos\\WebChatServer\\WebChatServer\\wwwroot\\css\\chat.css",
+      "PackagePath": "staticwebassets\\css\\chat.css"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\source\\repos\\WebChatServer\\WebChatServer\\wwwroot\\css\\chatroom.css",
+      "PackagePath": "staticwebassets\\css\\chatroom.css"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\source\\repos\\WebChatServer\\WebChatServer\\wwwroot\\css\\index.css",
+      "PackagePath": "staticwebassets\\css\\index.css"
+    },
+    {
       "Id": "C:\\Users\\Admin\\source\\repos\\WebChatServer\\WebChatServer\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

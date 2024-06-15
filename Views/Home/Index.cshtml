@@ -2,18 +2,24 @@
     ViewData["Title"] = "Trang chủ";
 }
 
-<h2>@ViewData["Title"]</h2>
-<p>@ViewData["StudentInfo"]</p>
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+}
 
-@if (ViewData["Username"] != null)
-{
-    <p>Chào mừng, @ViewData["Username"]</p>
-    <p>Email: @ViewData["Email"]</p>
-    <form asp-action="Logout" method="post">
-        <button type="submit">Đăng xuất</button>
-    </form>
-}
-else
-{
-    <p><a href="/login">Đăng nhập</a></p>
-}
+<div class="index-page">
+    <h2>@ViewData["Title"]</h2>
+    <p>@ViewData["StudentInfo"]</p>
+
+    @if (ViewData["Username"] != null)
+    {
+        <p>Chào mừng, @ViewData["Username"]</p>
+        <p>Email: @ViewData["Email"]</p>
+        <form asp-action="Logout" method="post">
+            <button type="submit">Đăng xuất</button>
+        </form>
+    }
+    else
+    {
+        <p><a href="/Home/login">Đăng nhập</a></p>
+    }
+</div>

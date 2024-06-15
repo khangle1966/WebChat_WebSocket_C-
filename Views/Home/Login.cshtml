@@ -1,6 +1,10 @@
 ﻿@model WebChatServer.Models.LoginModel
 
-<div class="container">
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" />
+}
+
+<div class="auth-page">
     <h2>Đăng nhập</h2>
 
     <form method="post" action="/Auth/Login">
@@ -17,7 +21,7 @@
     @if (TempData["ErrorMessage"] != null)
     {
         <div>
-            <p style="color:red">@TempData["ErrorMessage"]</p>
+            <p class="error-message">@TempData["ErrorMessage"]</p>
         </div>
     }
 </div>

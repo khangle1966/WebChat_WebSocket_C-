@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -16,13 +15,7 @@ namespace WebChatServer.Data
         {
             var messages = await GetAllMessages();
             messages.Add(message);
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                WriteIndented = true
-            };
-            var json = JsonSerializer.Serialize(messages, options);
+            var json = JsonSerializer.Serialize(messages);
             await File.WriteAllTextAsync(filePath, json);
         }
 
@@ -44,20 +37,14 @@ namespace WebChatServer.Data
         public async Task<List<Message>> GetMessagesForRoom(int chatRoomId)
         {
             var messages = await GetAllMessages();
-            return messages.Where(m => m.ChatRoomId == chatRoomId).ToList();
+            return messages.FindAll(m => m.ChatRoomId == chatRoomId);
         }
 
         public async Task ClearMessagesForRoom(int chatRoomId)
         {
             var messages = await GetAllMessages();
             messages.RemoveAll(m => m.ChatRoomId == chatRoomId);
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                WriteIndented = true
-            };
-            var json = JsonSerializer.Serialize(messages, options);
+            var json = JsonSerializer.Serialize(messages);
             await File.WriteAllTextAsync(filePath, json);
         }
     }

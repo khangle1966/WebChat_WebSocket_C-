@@ -1,0 +1,82 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.chatroom-page {
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+    .chatroom-page h2 {
+        color: #444;
+        border-bottom: 2px solid #e6e6e6;
+        padding-bottom: 10px;
+    }
+
+    .chatroom-page #messages {
+        max-height: 400px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+    }
+
+    .chatroom-page ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .chatroom-page ul li {
+            padding: 10px;
+            border-bottom: 1px solid #e6e6e6;
+            transition: background 0.3s ease;
+        }
+
+            .chatroom-page ul li:nth-child(odd) {
+                background: #f9f9f9;
+            }
+
+            .chatroom-page ul li:hover {
+                background: #f1f1f1;
+            }
+
+    .chatroom-page form {
+        display: flex;
+        margin-top: 20px;
+    }
+
+        .chatroom-page form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            transition: border-color 0.3s ease;
+        }
+
+            .chatroom-page form input[type="text"]:focus {
+                border-color: #007bff;
+            }
+
+        .chatroom-page form button {
+            padding: 10px 20px;
+            background: #007bff;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 0 5px 5px 0;
+            transition: background 0.3s ease;
+        }
+
+            .chatroom-page form button:hover {
+                background: #0056b3;
+            }
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #007bff;
+    color: #fff;
+}

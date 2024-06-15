@@ -9,6 +9,7 @@ using WebChatServer.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using WebChatServer.Handlers;
 
 namespace WebChatServer.Services
 {
@@ -29,24 +30,22 @@ namespace WebChatServer.Services
         {
             var message = new Message
             {
+                ChatRoomId = chatRoomId,
                 UserName = username,
                 Text = messageText,
-                CreatedAt = DateTime.UtcNow,
-                ChatRoomId = chatRoomId
+                CreatedAt = DateTime.Now
             };
-
             await _messageRepository.AddMessage(message);
         }
 
         public async Task<List<Message>> GetMessagesAsync(int chatRoomId)
         {
-            var messages = await _messageRepository.GetAllMessages();
-            return messages.Where(m => m.ChatRoomId == chatRoomId).ToList();
+            return await _messageRepository.GetMessagesForRoom(chatRoomId);
         }
 
-        public void UpdateChatRoomStatus(int chatRoomId, bool isOnline)
+        public async Task UpdateChatRoomStatus(int chatRoomId, bool isOnline)
         {
-            var chatRoom = _chatRooms?.FirstOrDefault(r => r.Id == chatRoomId);
+            var chatRoom = WebSocketHandler._chatRooms?.FirstOrDefault(r => r.Id == chatRoomId);
             if (chatRoom != null)
             {
                 chatRoom.IsOnline = isOnline;
@@ -54,10 +53,14 @@ namespace WebChatServer.Services
                 {
                     chatRoom.LastMessageTimestamp = DateTime.Now;
                 }
+                else
+                {
+                    await _messageRepository.ClearMessagesForRoom(chatRoomId);
+                }
             }
         }
 
-        public async Task<User?> AuthenticateUserAsync(string username, string password)
+            public async Task<User?> AuthenticateUserAsync(string username, string password)
         {
             var user = await _userRepository.GetUserByUsername(username);
             if (user == null) return null;
