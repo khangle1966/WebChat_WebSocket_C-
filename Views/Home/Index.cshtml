@@ -1,10 +1,19 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title>Index</title>
-</head>
-<body>
-    <h1>Welcome to Web Chat</h1>
-    <a href="/Home/Login">Login</a>
-</body>
-</html>
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p>@ViewData["StudentInfo"]</p>
+
+@if (ViewData["Username"] != null)
+{
+    <p>Chào mừng, @ViewData["Username"]</p>
+    <p>Email: @ViewData["Email"]</p>
+    <form asp-action="Logout" method="post">
+        <button type="submit">Đăng xuất</button>
+    </form>
+}
+else
+{
+    <p><a href="/login">Đăng nhập</a></p>
+}

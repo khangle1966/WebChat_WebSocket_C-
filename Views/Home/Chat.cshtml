@@ -1,44 +1,19 @@
-﻿@model WebChatServer.Models.ChatModel
+﻿@model List<WebChatServer.Models.ChatRoomModel>
 
-<div class="container">
-    <h2>Chat</h2>
-
-    <div id="messages"></div>
-
-    <div>
-        <input type="text" id="message" placeholder="Enter your message" />
-        <button onclick="sendMessage()">Send</button>
-    </div>
-</div>
-
-@section Scripts {
-    <script>
-        var socket;
-        var token = '@Context.Session.GetString("Token")';
-        var username = '@Context.Session.GetString("Username")';
-
-        function connect() {
-            socket = new WebSocket(`ws://localhost:5273?access_token=${token}&username=${username}`);
-
-            socket.onmessage = function (event) {
-                var messages = document.getElementById('messages');
-                var data = JSON.parse(event.data);
-                var message = document.createElement('div');
-                message.textContent = `${data.User}: ${data.Message}`;
-                messages.appendChild(message);
-            };
-
-            socket.onclose = function () {
-                alert('WebSocket connection closed');
-            };
-        }
-
-        function sendMessage() {
-            var message = document.getElementById('message').value;
-            socket.send(message);
-            document.getElementById('message').value = '';
-        }
-
-        window.onload = connect;
-    </script>
-}
+<h2>Phòng chat</h2>
+<ul>
+    @foreach (var room in Model)
+    {
+        <li>
+            @room.Name - @if (room.IsOnline)
+            {
+                <span>Trực tuyến</span>
+            }
+            else
+            {
+                <span>Ngoại tuyến</span>
+            }
+            <a href="/Home/ChatRoom/@room.Id">Vào phòng</a>
+        </li>
+    }
+</ul>

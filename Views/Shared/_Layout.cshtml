@@ -10,7 +10,14 @@
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/Home/Register">Register</a></li>
-                <li><a href="/Home/Login">Login</a></li>
+                @if (Context.Session.GetString("Username") == null)
+                {
+                    <li><a href="/Home/Login">Login</a></li>
+                }
+                else
+                {
+                    <li><a href="/Home/Logout">Logout</a></li>
+                }
                 <li><a href="/Home/Chat">Chat</a></li>
             </ul>
         </nav>

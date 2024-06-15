@@ -1,18 +1,18 @@
 ﻿@model WebChatServer.Models.LoginModel
 
 <div class="container">
-    <h2>Login</h2>
+    <h2>Đăng nhập</h2>
 
     <form method="post" action="/Auth/Login">
         <div>
-            <label asp-for="Username">Username:</label>
+            <label asp-for="Username">Tên người dùng:</label>
             <input asp-for="Username" />
         </div>
         <div>
-            <label asp-for="Password">Password:</label>
+            <label asp-for="Password">Mật khẩu:</label>
             <input asp-for="Password" type="password" />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Đăng nhập</button>
     </form>
     @if (TempData["ErrorMessage"] != null)
     {

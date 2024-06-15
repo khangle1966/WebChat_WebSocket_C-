@@ -70,3 +70,4 @@ C:\Users\Admin\source\repos\WebChatServer\WebChatServer\bin\Debug\net7.0\Microso
 C:\Users\Admin\source\repos\WebChatServer\WebChatServer\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
 C:\Users\Admin\source\repos\WebChatServer\WebChatServer\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
 C:\Users\Admin\source\repos\WebChatServer\WebChatServer\bin\Debug\net7.0\System.Security.Permissions.dll
+C:\Users\Admin\source\repos\WebChatServer\WebChatServer\bin\Debug\net7.0\users.json

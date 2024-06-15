@@ -1,0 +1,88 @@
+﻿@model List<WebChatServer.Models.Message>
+
+<h2>Tin nhắn trong phòng</h2>
+<div id="messages">
+    <ul>
+        @foreach (var message in Model)
+        {
+            <li class="message" data-timestamp="@message.CreatedAt.Ticks">@message.CreatedAt.ToString("MM/dd/yyyy HH:mm:ss tt") - @message.UserName: @message.Text</li>
+        }
+    </ul>
+</div>
+
+<form id="sendForm" method="post">
+    <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." />
+    <button type="submit">Gửi</button>
+</form>
+
+<script>
+    const username = '@Context.Session.GetString("Username")';
+    const roomId = '@ViewData["RoomId"]';
+    const token = '@Context.Session.GetString("Token")';
+
+    // Initialize WebSocket
+    const socket = new WebSocket(`ws://localhost:5273/ws?username=${username}&chatRoomId=${roomId}&access_token=${token}`);
+
+    socket.onopen = function () {
+        console.log('WebSocket is connected.');
+    };
+
+    socket.onmessage = function (event) {
+        const message = JSON.parse(event.data);
+        const messagesDiv = document.getElementById('messages');
+        const newMessage = document.createElement('li');
+        newMessage.textContent = `${message.CreatedAt} - ${message.User}: ${message.Message}`;
+        newMessage.classList.add('message');
+        newMessage.dataset.timestamp = new Date(message.CreatedAt).getTime();
+
+        // Check if the message is already in the list
+        const existingMessages = messagesDiv.querySelectorAll('li.message');
+        let messageExists = false;
+        existingMessages.forEach(msg => {
+            if (msg.dataset.timestamp == newMessage.dataset.timestamp && msg.textContent == newMessage.textContent) {
+                messageExists = true;
+            }
+        });
+
+        if (!messageExists) {
+            messagesDiv.querySelector('ul').appendChild(newMessage);
+        }
+    };
+
+    socket.onclose = function () {
+        console.log('WebSocket is closed.');
+    };
+
+    socket.onerror = function (error) {
+        console.error('WebSocket error:', error);
+    };
+
+    document.getElementById('sendForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value;
+        if (message && socket.readyState === WebSocket.OPEN) {
+            socket.send(message);
+            messageInput.value = '';
+        }
+    });
+
+    // Function to remove duplicate messages
+    function removeDuplicateMessages() {
+        const messagesDiv = document.getElementById('messages');
+        const messages = messagesDiv.querySelectorAll('li.message');
+        const seenMessages = new Set();
+
+        messages.forEach(msg => {
+            const messageContent = msg.textContent + msg.dataset.timestamp;
+            if (seenMessages.has(messageContent)) {
+                msg.remove();
+            } else {
+                seenMessages.add(messageContent);
+            }
+        });
+    }
+
+    // Call the function to remove duplicate messages on page load
+    document.addEventListener('DOMContentLoaded', removeDuplicateMessages);
+</script>

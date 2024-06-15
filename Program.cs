@@ -7,7 +7,7 @@ using System.Text;
 using WebChatServer.Data;
 using WebChatServer.Models;
 using WebChatServer.Handlers;
-
+using WebChatServer.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 var key = "aVeryStrongSecretKeyThatIsDefinitely32CharactersLong!";
@@ -44,7 +44,16 @@ builder.Services.AddWebSockets(options =>
 
 builder.Services.AddSingleton<MessageRepository>();
 builder.Services.AddSingleton<UserRepository>();
+
+var chatRooms = new List<ChatRoomModel>
+{
+    new ChatRoomModel { Id = 1, Name = "Room 1", LastActive = DateTime.Now.AddMinutes(-1), LastMessageTimestamp = DateTime.Now.AddMinutes(-1) },
+    new ChatRoomModel { Id = 2, Name = "Room 2", LastActive = DateTime.Now.AddMinutes(-5), LastMessageTimestamp = DateTime.Now.AddMinutes(-5) },
+};
+builder.Services.AddSingleton(chatRooms);
+
 builder.Services.AddSingleton<WebSocketHandler>();
+builder.Services.AddSingleton<ChatFacade>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

@@ -1,5 +1,6 @@
 ﻿namespace WebChatServer.Controllers
 {
+    using System;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.IdentityModel.Tokens;
     using System.IdentityModel.Tokens.Jwt;
@@ -53,12 +54,6 @@
                 return RedirectToAction("Login", "Home");
             }
 
-            if (string.IsNullOrEmpty(user.PasswordSalt))
-            {
-                TempData["ErrorMessage"] = "Invalid user data.";
-                return RedirectToAction("Login", "Home");
-            }
-
             using var hmac = new HMACSHA512(Convert.FromBase64String(user.PasswordSalt));
             var computedHash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(password)));
             if (computedHash != user.PasswordHash)
@@ -86,6 +81,7 @@
 
             HttpContext.Session.SetString("Token", tokenString ?? string.Empty);
             HttpContext.Session.SetString("Username", user.Username ?? string.Empty);
+            HttpContext.Session.SetString("Email", user.Email ?? string.Empty);
             return RedirectToAction("Chat", "Home");
         }
     }

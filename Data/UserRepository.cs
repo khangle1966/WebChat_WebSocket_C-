@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WebChatServer.Models;
 
@@ -8,35 +10,40 @@ namespace WebChatServer.Data
 {
     public class UserRepository
     {
-        private readonly string filePath = "users.txt";
+        private readonly string filePath = "users.json";
 
         public async Task AddUser(User user)
         {
-            var userLine = $"{user.Username}|{user.PasswordHash}|{user.PasswordSalt}|{user.Email}";
-            await File.AppendAllTextAsync(filePath, userLine + Environment.NewLine);
+            var users = await GetAllUsers();
+            users.Add(user);
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            var json = JsonSerializer.Serialize(users, options);
+            await File.WriteAllTextAsync(filePath, json);
         }
 
         public async Task<User?> GetUserByUsername(string username)
         {
+            var users = await GetAllUsers();
+            return users.Find(u => u.Username == username);
+        }
+
+        private async Task<List<User>> GetAllUsers()
+        {
             if (File.Exists(filePath))
             {
-                var lines = await File.ReadAllLinesAsync(filePath);
-                foreach (var line in lines)
+                var json = await File.ReadAllTextAsync(filePath);
+                var options = new JsonSerializerOptions
                 {
-                    var parts = line.Split('|');
-                    if (parts[0] == username)
-                    {
-                        return new User
-                        {
-                            Username = parts[0],
-                            PasswordHash = parts[1],
-                            PasswordSalt = parts[2],
-                            Email = parts[3]
-                        };
-                    }
-                }
+                    PropertyNameCaseInsensitive = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                };
+                return JsonSerializer.Deserialize<List<User>>(json, options) ?? new List<User>();
             }
-            return null;
+            return new List<User>();
         }
     }
 }
