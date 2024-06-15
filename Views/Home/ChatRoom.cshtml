@@ -30,18 +30,18 @@
     const socket = new WebSocket(`ws://localhost:5273/ws?username=${username}&chatRoomId=${roomId}&access_token=${token}`);
 
     socket.onopen = function () {
-        console.log('WebSocket is connected.');
+        console.log('WebSocket đã kết nối.');
     };
 
     socket.onmessage = function (event) {
         const message = JSON.parse(event.data);
         const messagesDiv = document.getElementById('messages');
         const newMessage = document.createElement('li');
-        newMessage.textContent = `${message.CreatedAt} - ${message.User}: ${message.Message}`;
+        newMessage.textContent = `${new Date(message.CreatedAt).toLocaleString()} - ${message.User}: ${message.Message}`;
         newMessage.classList.add('message');
         newMessage.dataset.timestamp = new Date(message.CreatedAt).getTime();
 
-        // Check if the message is already in the list
+        // Kiểm tra nếu tin nhắn đã tồn tại trong danh sách
         const existingMessages = messagesDiv.querySelectorAll('li.message');
         let messageExists = false;
         existingMessages.forEach(msg => {
@@ -56,11 +56,11 @@
     };
 
     socket.onclose = function () {
-        console.log('WebSocket is closed.');
+        console.log('WebSocket đã đóng.');
     };
 
     socket.onerror = function (error) {
-        console.error('WebSocket error:', error);
+        console.error('Lỗi WebSocket:', error);
     };
 
     document.getElementById('sendForm').addEventListener('submit', function (event) {

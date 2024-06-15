@@ -72,7 +72,7 @@ namespace WebChatServer.Handlers
                 var messages = await _messageRepository.GetMessagesForRoom(chatRoomId);
                 foreach (var message in messages)
                 {
-                    var chatMessage = new { User = message.UserName, Message = message.Text, CreatedAt = message.CreatedAt.ToString("MM/dd/yyyy HH:mm:ss tt") };
+                    var chatMessage = new { User = message.UserName, Message = message.Text, CreatedAt = message.CreatedAt.ToString("o") };
                     var chatMessageJson = JsonSerializer.Serialize(chatMessage);
                     var buffer = Encoding.UTF8.GetBytes(chatMessageJson);
                     await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
@@ -83,7 +83,7 @@ namespace WebChatServer.Handlers
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
                         var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                        var chatMessage = new { User = username, Message = message, CreatedAt = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") };
+                        var chatMessage = new { User = username, Message = message, CreatedAt = DateTime.Now.ToString("o") };
                         var chatMessageJson = JsonSerializer.Serialize(chatMessage);
 
                         await _messageRepository.AddMessage(new Message { UserName = username, Text = message, ChatRoomId = chatRoomId, CreatedAt = DateTime.Now });

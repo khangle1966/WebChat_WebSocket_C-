@@ -40,7 +40,8 @@ namespace WebChatServer.Services
 
         public async Task<List<Message>> GetMessagesAsync(int chatRoomId)
         {
-            return await _messageRepository.GetMessagesForRoom(chatRoomId);
+            var messages = await _messageRepository.GetAllMessages();
+            return messages.Where(m => m.ChatRoomId == chatRoomId).ToList();
         }
 
         public async Task UpdateChatRoomStatus(int chatRoomId, bool isOnline)

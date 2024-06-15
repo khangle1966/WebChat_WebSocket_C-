@@ -18,7 +18,6 @@ namespace WebChatServer.Data
             var json = JsonSerializer.Serialize(messages);
             await File.WriteAllTextAsync(filePath, json);
         }
-
         public async Task<List<Message>> GetAllMessages()
         {
             if (File.Exists(filePath))
